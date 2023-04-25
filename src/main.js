@@ -1,6 +1,6 @@
 // Michael Nieto
 // *Mod Title here*
-// Time it took to finish: 0 hours
+// Time it took to finish: 4 hours
 
 // Intended mods:
 // <- 5 point tier ->
@@ -12,7 +12,6 @@
 // parallax scrolling [10 points]
 // 
 // <- 15 point tier ->
-// new spaceship type [15 points]
 // new timing system [15 points]
 // create particle emitter [15 points]
 
@@ -20,6 +19,7 @@
 // Randomize spaceship movement direction [5 pts]
 // Display remaining time on screen [10 pts]
 // Randomize explosion sounds [10 points]
+// New spaceship type [15 pts] ~ Every time it respawns it changes move speed for added difficulty
 
 let config = {
     type: Phaser.CANVAS,
