@@ -69,11 +69,28 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
             fixedWidth: 100
-        }
+        };
 
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 
             this.p1Score, scoreConfig);
         
+        // display level timer
+        let timerConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 120
+        };
+
+        this.timeLeft = this.add.text((game.config.width/2) - (timerConfig.fixedWidth/2), 
+            borderUISize + borderPadding*2, this.p1Score, timerConfig);
+
         // Game Over Flag
         this.gameOver = false;
 
@@ -121,6 +138,19 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+
+        // Update Timer using the provided timer format function
+        let secondsLeft = this.clock.getRemainingSeconds();
+        this.timeLeft.text = this.formatTimer(secondsLeft);
+    }
+
+    formatTimer(time) {
+        let minutes = Math.floor(time/60);
+        let seconds = Math.floor(time % 60);
+        minutes = minutes.toString().padStart(2, '0');
+        seconds = seconds.toString().padStart(2, '0');
+
+        return `${minutes} : ${seconds}`;
     }
 
     checkCollision (rocket, ship) {
@@ -150,7 +180,11 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
 
-        // play explosion sound effect
-        this.sound.play('sfx_explosion');
+        // play random explosion sound effect
+        // Taken from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript\
+        let max = 5;
+        let min = 1;
+        let randExplosionNumber = Math.floor(Math.random() * (max - min + 1) + min);
+        this.sound.play('sfx_explosion' + randExplosionNumber);
     }
 }
