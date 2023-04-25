@@ -106,6 +106,7 @@ class Play extends Phaser.Scene {
                 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+
     }
 
     update() {
@@ -113,6 +114,7 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.game.sound.stopAll();
             this.scene.start('menuScene');
         }
 
@@ -194,6 +196,14 @@ class Play extends Phaser.Scene {
         let max = 5;
         let min = 1;
         let randExplosionNumber = Math.floor(Math.random() * (max - min + 1) + min);
-        this.sound.play('sfx_explosion' + randExplosionNumber);
+
+        let explosionConfig = {};
+        // explosion sounds 1, 4, and 5 are a little loud, so apply a band aid fix lol
+        if (randExplosionNumber == 1 || randExplosionNumber == 4 || randExplosionNumber == 5) {
+            explosionConfig = {
+                volume: 0.455
+            };
+        }
+        this.sound.play('sfx_explosion' + randExplosionNumber, explosionConfig);
     }
 }

@@ -14,6 +14,9 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_explosion3', './assets/explosion3.wav');
         this.load.audio('sfx_explosion4', './assets/explosion4.wav');
         this.load.audio('sfx_explosion5', './assets/explosion5.wav');
+
+        // load music
+        this.load.audio('ingame_music', './assets/ingame_music.mp3');
     }
     
     create () {
@@ -55,7 +58,11 @@ class Menu extends Phaser.Scene {
                 gameTimer: 60000    
             }
             this.sound.play('sfx_select');
-            this.scene.start('playScene');    
+            this.scene.start('playScene');  
+
+            // Add in game music
+            this.music = this.sound.add('ingame_music', {loop: true});
+            this.music.play();  
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             // hard mode
@@ -65,6 +72,10 @@ class Menu extends Phaser.Scene {
             }
             this.sound.play('sfx_select');
             this.scene.start('playScene');    
+
+            // Add in game music
+            this.music = this.sound.add('ingame_music', {loop: true});
+            this.music.play();
         }
     }
 }

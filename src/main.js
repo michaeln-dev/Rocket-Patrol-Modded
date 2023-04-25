@@ -1,10 +1,9 @@
 // Michael Nieto
 // *Mod Title here*
-// Time it took to finish: 4 hours
+// Time it took to finish: 5 hours
 
 // Intended mods:
 // <- 5 point tier ->
-// Add background music [5 points]
 // new scrolling tile sprite [5 points]
 //
 // <- 10 point tier ->
@@ -16,6 +15,7 @@
 // create particle emitter [15 points]
 
 // Completed Mods:
+// Add background music [5 pts]
 // Randomize spaceship movement direction [5 pts]
 // Display remaining time on screen [10 pts]
 // Randomize explosion sounds [10 points]
