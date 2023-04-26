@@ -1,13 +1,11 @@
 // Space Prefab
 class Spaceship extends Phaser.GameObjects.Sprite {
-    constructor (scene, x, y, texture, frame, pointValue, isSpecialShip) {
+    constructor (scene, x, y, texture, frame, pointValue, addedTimeValue, isSpecialShip) {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
         this.points = pointValue;
+        this.addedTime = addedTimeValue;
         this.isSpecialShip = isSpecialShip
-        
-        // Adding a time bonus to the ship
-        this.timeBonus = 3;
 
         // if the spaceship is the special ship, increase it's move speed
         if (this.isSpecialShip) {

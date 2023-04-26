@@ -36,13 +36,13 @@ class Play extends Phaser.Scene {
         
         // add spaceships (x4)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, 
-            borderUISize*4, 'spaceship', 0, 30, false).setOrigin(0, 0);
+            borderUISize*4, 'spaceship', 0, 30, 3, false).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, 
-            borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, false).setOrigin(0,0);
+            borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, 2, false).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 
-            'spaceship', 0, 10, false).setOrigin(0,0);
+            'spaceship', 0, 10, 1, false).setOrigin(0,0);
         this.specialShip = new Spaceship(this, game.config.width + borderUISize*3, 
-            borderUISize*7 + borderPadding*8, 'special_spaceship', 0, 50, true).setOrigin(0,0);
+            borderUISize*7 + borderPadding*8, 'special_spaceship', 0, 50, 3, true).setOrigin(0,0);
         
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -190,6 +190,10 @@ class Play extends Phaser.Scene {
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        // Add time to the timer
+        //this.clock.
+        this.clock.timeLeft += ship.addedTime;
 
         // play random explosion sound effect
         // Taken from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript\

@@ -1,6 +1,6 @@
 // Michael Nieto
 // *Mod Title here*
-// Time it took to finish: 5 hours
+// Time it took to finish: 6 hours
 
 // Intended mods:
 // <- 5 point tier ->

@@ -34,6 +34,7 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        // 
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 
             'ROCKET PATROL is different lol', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 
@@ -57,7 +58,7 @@ class Menu extends Phaser.Scene {
                 spaceshipSpeed: 3,
                 gameTimer: 60000    
             }
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select', {volume: 0.4});
             this.scene.start('playScene');  
 
             // Add in game music
