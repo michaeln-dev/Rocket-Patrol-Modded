@@ -11,7 +11,6 @@
 // parallax scrolling [10 points]
 // 
 // <- 15 point tier ->
-// new timing system [15 points]
 // create particle emitter [15 points]
 
 // Completed Mods:
@@ -20,6 +19,7 @@
 // Display remaining time on screen [10 pts]
 // Randomize explosion sounds [10 points]
 // New spaceship type [15 pts] ~ Every time it respawns it changes move speed for added difficulty
+// New timing system [15 points]
 
 let config = {
     type: Phaser.CANVAS,

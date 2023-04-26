@@ -36,13 +36,13 @@ class Play extends Phaser.Scene {
         
         // add spaceships (x4)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, 
-            borderUISize*4, 'spaceship', 0, 30, 3, false).setOrigin(0, 0);
+            borderUISize*4, 'spaceship', 0, 30, 2, false).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, 
-            borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, 2, false).setOrigin(0,0);
+            borderUISize*5 + borderPadding*2, 'spaceship', 0, 20, 1, false).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 
             'spaceship', 0, 10, 1, false).setOrigin(0,0);
         this.specialShip = new Spaceship(this, game.config.width + borderUISize*3, 
-            borderUISize*7 + borderPadding*8, 'special_spaceship', 0, 50, 3, true).setOrigin(0,0);
+            borderUISize*7 + borderPadding*8, 'special_spaceship', 0, 50, 0, true).setOrigin(0,0);
         
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -156,12 +156,41 @@ class Play extends Phaser.Scene {
     }
 
     formatTimer(time) {
+        // Takes an argument in seconds and returns the time in 00 : 00 format
         let minutes = Math.floor(time/60);
         let seconds = Math.floor(time % 60);
         minutes = minutes.toString().padStart(2, '0');
         seconds = seconds.toString().padStart(2, '0');
 
         return `${minutes} : ${seconds}`;
+    }
+
+    updateTimer (addedTime) {
+        let timerConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        };
+
+        // Add the current time with the newly added time
+        let newTime = (this.clock.getRemainingSeconds() + addedTime) * 1000;
+
+        // Remove the old timer and add a new timer with the new time
+        this.clock.remove();
+        this.clock = this.time.delayedCall(newTime, () => {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', 
+                timerConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 
+                'Press (R) to Restart or ← for Menu', timerConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }, null, this);
     }
 
     checkCollision (rocket, ship) {
@@ -192,8 +221,8 @@ class Play extends Phaser.Scene {
         this.scoreLeft.text = this.p1Score;
 
         // Add time to the timer
-        //this.clock.
-        this.clock.timeLeft += ship.addedTime;
+        this.updateTimer(ship.addedTime);
+        // this.clock.timeLeft += ship.addedTime;
 
         // play random explosion sound effect
         // Taken from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript\
