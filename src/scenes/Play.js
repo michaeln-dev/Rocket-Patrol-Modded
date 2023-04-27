@@ -119,7 +119,26 @@ class Play extends Phaser.Scene {
         
         this.startText = this.add.text(game.config.width/2, game.config.height/2 + 64, 
             'Press (F) to begin', scoreConfig).setOrigin(0.5);
+        
+        let addedTimeConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            //backgroundColor: '#F3B141',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        };
 
+        // Additional time text
+        this.addedTimeText = this.add.text((game.config.width/1.42) - (timerConfig.fixedWidth/2), 
+            borderUISize + borderPadding*2, "+0", addedTimeConfig);
+        this.addedTimeText.alpha = 0;
+        this.addedTimeTimer = this.time.delayedCall(100, () => {}, null, this);
+        
         // Game Over Flag
         this.gameOver = false;
 
@@ -308,11 +327,19 @@ class Play extends Phaser.Scene {
             this.p2Score += ship.points;
             this.scoreRight.text = this.p2Score;
         }
-        
+
+        // Display the additional time on the top
+        if (ship.addedTime > 0) {
+            this.addedTimeText.text = '+' + ship.addedTime;
+            this.addedTimeText.alpha = 1;
+            this.addedTimeTimer.remove();
+            this.addedTimeTimer = this.time.delayedCall(1000, () => {
+                this.addedTimeText.alpha = 0;
+            }, null, this);
+        }
 
         // Add time to the timer
         this.updateTimer(ship.addedTime);
-        // this.clock.timeLeft += ship.addedTime;
 
         // play random explosion sound effect
         // Taken from: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript\

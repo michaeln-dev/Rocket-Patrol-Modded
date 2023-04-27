@@ -1,6 +1,6 @@
 // Michael Nieto
 // Rocket Patrol 1.5
-// Time it took to finish: 10 hours
+// Time it took to finish: 11 hours
 
 // Completed Mods:
 // New scrolling tile sprite [5 pts]
