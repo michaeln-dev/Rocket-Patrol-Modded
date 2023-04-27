@@ -40,7 +40,7 @@ class Menu extends Phaser.Scene {
 
         // create Rocket Patrol game title
         this.add.text(game.config.width/2, borderUISize - borderPadding, 
-            'ROCKET\nPATROL', titleConfig).setOrigin(0.5, 0);
+            'ROCKET\nPATROL 1.5', titleConfig).setOrigin(0.5, 0);
 
         // menu text configuration
         let menuConfig = {
@@ -60,10 +60,10 @@ class Menu extends Phaser.Scene {
 
         // difficulty tip text
         this.add.text((game.config.width/2)/2, game.config.height/1.75 - borderUISize - borderPadding, 
-            'Use ←→ arrows to change difficulty:', menuConfig).setOrigin(0.5);
+            'Use ← → arrows to change difficulty:', menuConfig).setOrigin(0.5);
         
         // difficulty text
-        menuConfig.color = '#000000'
+        menuConfig.color = '#000000';
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.padding.right = 15;
         menuConfig.padding.left = 15;
@@ -147,7 +147,7 @@ class Menu extends Phaser.Scene {
                     gameTimer: 60000    
                 }
                 this.sound.play('sfx_select', {volume: 0.4});
-                this.scene.start('playScene');  
+                this.scene.start('playScene',{playerStart: 1, p1Score: 0, p2Score: 0});  
     
                 // Add in game music
                 this.music = this.sound.add('ingame_music', {loop: true});
@@ -162,7 +162,7 @@ class Menu extends Phaser.Scene {
                     gameTimer: 45000    
                 }
                 this.sound.play('sfx_select', {volume: 0.4});
-                this.scene.start('playScene');  
+                this.scene.start('playScene', {playerStart: 1, p1Score: 0, p2Score: 0});  
     
                 // Add in game music
                 this.music = this.sound.add('ingame_music', {loop: true});

@@ -1,13 +1,6 @@
 // Michael Nieto
 // *Mod Title here*
-// Time it took to finish: 7 hours
-
-// Intended mods:
-// <- 10 point tier ->
-// new title screen [10 points] 
-// 
-// <- 15 point tier ->
-// create particle emitter [15 points]
+// Time it took to finish: 10 hours
 
 // Completed Mods:
 // New scrolling tile sprite [5 pts]
@@ -18,7 +11,8 @@
 // New title screen [10 pts] ~ New layout and text and it even has a cool tutorial animation
 // Parallax scrolling [10 pts] ~ The sun layer doesn't move while the stars do
 // New spaceship type [15 pts] ~ Every time it respawns it changes move speed for added difficulty
-// New timing system [15 points] ~ Special ship gives high points but no time bonus
+// New timing system [15 pts] ~ Special ship gives high points but no time bonus
+// Alternating 2 player mode [15 pts]
 
 let config = {
     type: Phaser.CANVAS,

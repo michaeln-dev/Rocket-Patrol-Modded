@@ -1,6 +1,12 @@
 class Play extends Phaser.Scene {
     constructor() {
-        super('playScene');
+        super('playScene');        
+    }
+
+    init (args) {
+        this.currentPlayer = args.playerStart;
+        this.p1Score = args.p1Score;
+        this.p2Score = args.p2Score;
     }
 
     preload() {
@@ -60,9 +66,10 @@ class Play extends Phaser.Scene {
         });
 
         // initialize score
-        this.p1Score = 0;
+        //this.p1Score = 0;
+        //this.p2Score = 0;
 
-          // display score
+          // display p1 score
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -79,6 +86,9 @@ class Play extends Phaser.Scene {
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 
             this.p1Score, scoreConfig);
         
+        this.scoreRight = this.add.text(game.config.width - borderUISize - borderPadding, 
+            borderUISize + borderPadding*2, this.p2Score, scoreConfig).setOrigin(1, 0);
+        
         // display level timer
         let timerConfig = {
             fontFamily: 'Courier',
@@ -94,33 +104,90 @@ class Play extends Phaser.Scene {
         };
 
         this.timeLeft = this.add.text((game.config.width/2) - (timerConfig.fixedWidth/2), 
-            borderUISize + borderPadding*2, this.p1Score, timerConfig);
+            borderUISize + borderPadding*2, "00 : 00", timerConfig);
+        
+        scoreConfig.fixedWidth = 0;
+        if (this.currentPlayer == 1) {
+            this.playerText = this.add.text(game.config.width/2, game.config.height/2, 'Player 1 Start', 
+                scoreConfig).setOrigin(0.5);
+        }
+        else {
+            this.playerText = this.add.text(game.config.width/2, game.config.height/2, 'Player 2 Start', 
+                scoreConfig).setOrigin(0.5);
+        }
+        
+        this.startText = this.add.text(game.config.width/2, game.config.height/2 + 64, 
+            'Press (F) to begin', scoreConfig).setOrigin(0.5);
 
         // Game Over Flag
         this.gameOver = false;
 
+        // Game start flag
+        this.gameStart = false;
+
         // 60 second play clock
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', 
-                scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 
-                'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
-        }, null, this);
-
+        this.clock;
     }
 
     update() {
+        this.stars.tilePositionX -= game.settings.parallaxSpeed;
+
+        if (!this.gameStart) {
+            if (Phaser.Input.Keyboard.JustDown(keyF)) {
+                let timerConfig = {
+                    fontFamily: 'Courier',
+                    fontSize: '28px',
+                    backgroundColor: '#F3B141',
+                    color: '#843605',
+                    align: 'right',
+                    padding: {
+                        top: 5,
+                        bottom: 5,
+                    },
+                    fixedWidth: 0
+                };
+
+                let gameOverText = '';
+                let proceedText = 'Press (R) to proceed or ← for Main Menu';
+                if (this.currentPlayer == 1) {
+                    gameOverText = 'GAME OVER PLAYER 1';
+                }
+                else {
+                    gameOverText = 'GAME OVER PLAYER 2';
+                }
+
+                this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+                    this.add.text(game.config.width/2, game.config.height/2, gameOverText, 
+                        timerConfig).setOrigin(0.5);
+                    timerConfig.fontSize = '24px';
+                    this.add.text(game.config.width/2, game.config.height/2 + 64, 
+                        proceedText, timerConfig).setOrigin(0.5);
+                    this.gameOver = true;
+                }, null, this);
+
+                this.playerText.destroy();
+                this.startText.destroy();
+
+                this.gameStart = true;
+            }
+            return;
+        }
+
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.restart();
+            // Pass in player 2 argument if leaving player 1 gameplay
+            if (this.currentPlayer == 1) {
+                this.scene.restart({playerStart: 2, p1Score: this.p1Score, p2Score: 0});
+            }
+            else {
+                this.scene.restart({playerStart: 1, p1Score: 0, p2Score: 0});
+            }
+            
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.game.sound.stopAll();
             this.scene.start('menuScene');
         }
-
-        this.stars.tilePositionX -= game.settings.parallaxSpeed;
 
         if (!this.gameOver) {
             this.p1Rocket.update();
@@ -181,16 +248,27 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         };
 
+        // Initialize the text that the game uses
+        let gameOverText = '';
+        let proceedText = 'Press (R) to proceed or ← for Main Menu';
+        if (this.currentPlayer == 1) {
+            gameOverText = 'GAME OVER PLAYER 1';
+        }
+        else {
+            gameOverText = 'GAME OVER PLAYER 2';
+        }
+
         // Add the current time with the newly added time
         let newTime = (this.clock.getRemainingSeconds() + addedTime) * 1000;
 
         // Remove the old timer and add a new timer with the new time
         this.clock.remove();
         this.clock = this.time.delayedCall(newTime, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', 
+            this.add.text(game.config.width/2, game.config.height/2, gameOverText, 
                 timerConfig).setOrigin(0.5);
+            timerConfig.fontSize = '24px';
             this.add.text(game.config.width/2, game.config.height/2 + 64, 
-                'Press (R) to Restart or ← for Menu', timerConfig).setOrigin(0.5);
+                proceedText, timerConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
@@ -219,8 +297,15 @@ class Play extends Phaser.Scene {
         });
 
         // score add and repaint
-        this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
+        if (this.currentPlayer == 1) {
+            this.p1Score += ship.points;
+            this.scoreLeft.text = this.p1Score;
+        }
+        else {
+            this.p2Score += ship.points;
+            this.scoreRight.text = this.p2Score;
+        }
+        
 
         // Add time to the timer
         this.updateTimer(ship.addedTime);
