@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     init (args) {
+        this.gameMode = args.gameMode;
         this.currentPlayer = args.playerStart;
         this.p1Score = args.p1Score;
         this.p2Score = args.p2Score;
@@ -149,12 +150,14 @@ class Play extends Phaser.Scene {
                 };
 
                 let gameOverText = '';
-                let proceedText = 'Press (R) to proceed or ← for Main Menu';
+                let proceedText = '';
                 if (this.currentPlayer == 1) {
                     gameOverText = 'GAME OVER PLAYER 1';
+                    proceedText = 'Press (R) to proceed or ← for Main Menu'
                 }
                 else {
                     gameOverText = 'GAME OVER PLAYER 2';
+                    proceedText = 'Press (R) to restart or ← for Main Menu'
                 }
 
                 this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
@@ -176,11 +179,11 @@ class Play extends Phaser.Scene {
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             // Pass in player 2 argument if leaving player 1 gameplay
-            if (this.currentPlayer == 1) {
-                this.scene.restart({playerStart: 2, p1Score: this.p1Score, p2Score: 0});
+            if (this.currentPlayer == 1 && !this.gameMode) { // If its currently player 1 and its the 2 player mode
+                this.scene.restart({gameMode: this.gameMode, playerStart: 2, p1Score: this.p1Score, p2Score: 0});
             }
             else {
-                this.scene.restart({playerStart: 1, p1Score: 0, p2Score: 0});
+                this.scene.restart({gameMode: this.gameMode, playerStart: 1, p1Score: 0, p2Score: 0});
             }
             
         }

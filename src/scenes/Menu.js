@@ -61,6 +61,10 @@ class Menu extends Phaser.Scene {
         // difficulty tip text
         this.add.text((game.config.width/2)/2, game.config.height/1.75 - borderUISize - borderPadding, 
             'Use ← → arrows to change difficulty:', menuConfig).setOrigin(0.5);
+
+        // mode tip text
+        this.add.text((game.config.width/2)/2, game.config.height/1.34 - borderUISize - borderPadding, 
+            'Use ↑ ↓ arrows to change player mode:', menuConfig).setOrigin(0.5);
         
         // difficulty text
         menuConfig.color = '#000000';
@@ -71,11 +75,17 @@ class Menu extends Phaser.Scene {
             game.config.height/1.55 - borderUISize - borderPadding, 'NOVICE', 
             menuConfig).setOrigin(0.5, 0.5);
         
+        menuConfig.padding.right = 10;
+        menuConfig.padding.left = 10;
+        this.modeText = this.add.text((game.config.width/2)/2, 
+            game.config.height/1.25 - borderUISize - borderPadding, '1 PLAYER GAME', 
+            menuConfig).setOrigin(0.5, 0.5);
+        
         // start button
         menuConfig.color = '#843605'
         menuConfig.padding.right = 5;
         menuConfig.padding.left = 5;
-        this.add.text((game.config.width/2) / 2, game.config.height/1.35, 
+        this.add.text((game.config.width/2) / 2,  game.config.height/1.15, 
             'PRESS (F) TO START', menuConfig).setOrigin(0.5);
 
         // tutorial text configuration
@@ -100,6 +110,9 @@ class Menu extends Phaser.Scene {
         // variable which stores difficulty 
         this.noviceDifficulty = true;
 
+        // variable which stores mode
+        this.singlePlayer = true;
+
         // place a rocket in the scene to demo the movement in the game
         // I'm using the below method to avoid any future resolution issues
         this.centerPosition = new Phaser.Math.Vector2(game.config.width/1.335, game.config.height/1.15);
@@ -121,6 +134,8 @@ class Menu extends Phaser.Scene {
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
     }
 
@@ -138,6 +153,19 @@ class Menu extends Phaser.Scene {
             }
         }
 
+        if (Phaser.Input.Keyboard.JustDown(keyUP) || Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+            if (this.singlePlayer) {
+                this.singlePlayer = false;
+                this.modeText.text = "2 PLAYER GAME";
+                this.sound.play('sfx_select', {volume: 0.4});
+            }
+            else {
+                this.singlePlayer = true;
+                this.modeText.text = "1 PLAYER GAME";
+                this.sound.play('sfx_select', {volume: 0.4});
+            }
+        }
+
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
             // play easy mode
             if (this.noviceDifficulty) {
@@ -147,7 +175,7 @@ class Menu extends Phaser.Scene {
                     gameTimer: 60000    
                 }
                 this.sound.play('sfx_select', {volume: 0.4});
-                this.scene.start('playScene',{playerStart: 1, p1Score: 0, p2Score: 0});  
+                this.scene.start('playScene',{gameMode: this.singlePlayer, playerStart: 1, p1Score: 0, p2Score: 0});  
     
                 // Add in game music
                 this.music = this.sound.add('ingame_music', {loop: true});
@@ -162,7 +190,7 @@ class Menu extends Phaser.Scene {
                     gameTimer: 45000    
                 }
                 this.sound.play('sfx_select', {volume: 0.4});
-                this.scene.start('playScene', {playerStart: 1, p1Score: 0, p2Score: 0});  
+                this.scene.start('playScene', {gameMode: this.singlePlayer, playerStart: 1, p1Score: 0, p2Score: 0});  
     
                 // Add in game music
                 this.music = this.sound.add('ingame_music', {loop: true});
